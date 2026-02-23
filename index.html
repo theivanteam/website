@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Техническое обслуживание — скоро вернёмся</title>
+
+  <style>
+    :root{
+      --bg1: #0b1220;
+      --bg2: #0f2a3a;
+      --accent: #f59e0b; /* тёплый золотой */
+      --muted: #94a3b8;
+      --glass: rgba(255,255,255,0.06);
+      --card: rgba(255,255,255,0.03);
+      --radius: 18px;
+      --shadow: 0 8px 30px rgba(2,6,23,0.6);
+      --ease: cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* Reset-ish */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(245,158,11,0.04), transparent 10%),
+                  linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: #e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:1024px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:center;
+      padding:28px;
+    }
+
+    /* Mobile first: stack columns */
+    @media (max-width:920px){
+      .wrap{grid-template-columns: 1fr; max-width:780px; gap:18px; padding:18px;}
+      .right{order:-1}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:28px;
+      position:relative;
+      overflow:visible;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Left panel: message */
+    .left{
+      padding:32px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      min-height:320px;
+    }
+
+    h1{
+      margin:0;
+      font-size:28px;
+      line-height:1.05;
+      letter-spacing: -0.02em;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .badge{
+      background: linear-gradient(90deg, rgba(245,158,11,0.16), rgba(255,255,255,0.02));
+      color: var(--accent);
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:13px;
+      box-shadow: 0 6px 20px rgba(245,158,11,0.06);
+    }
+
+    p.lead{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .clock-wrap{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:flex-start;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+
+    .timer{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background: var(--glass);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      color:#fff;
+      letter-spacing:0.02em;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.5);
+      transform: translateZ(0);
+      animation: float 4s var(--ease) infinite;
+    }
+
+    @keyframes float{
+      0%{transform: translateY(0)}
+      50%{transform: translateY(-6px)}
+      100%{transform: translateY(0)}
+    }
+
+    .small{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    /* Right visual panel */
+    .right{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:center;
+      justify-content:center;
+      min-height:320px;
+      position:relative;
+    }
+
+    /* Decorative card with SVG/hammer */
+    .visual{
+      width:100%;
+      max-width:360px;
+      aspect-ratio: 1.2 / 1;
+      background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01));
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      padding:18px;
+      overflow:visible;
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Sparkles */
+    .sparkles{
+      position:absolute;
+      inset: -24px -24px auto auto;
+      width:160px;
+      height:160px;
+      pointer-events:none;
+      filter: blur(6px) saturate(120%);
+      opacity:0.95;
+      transform: translate(20%, -12%);
+    }
+
+    /* SVG hammer animation */
+    .hammer{
+      width:72%;
+      height:auto;
+      transform-origin:center;
+      animation: bob 4.2s calc(-0.2s) var(--ease) infinite;
+      will-change: transform;
+      filter: drop-shadow(0 14px 30px rgba(2,6,23,0.5));
+    }
+
+    @keyframes bob{
+      0%{ transform: rotate(-6deg) translateY(0) }
+      50%{ transform: rotate(6deg) translateY(-8px) }
+      100%{ transform: rotate(-6deg) translateY(0) }
+    }
+
+    /* footer small text and button */
+    .actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:flex-start;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      background: linear-gradient(90deg, rgba(245,158,11,0.14), rgba(255,255,255,0.03));
+      color:var(--accent);
+      border:1px solid rgba(245,158,11,0.12);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      text-decoration:none;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+    }
+    .btn:active{ transform: translateY(1px) scale(.998) }
+    .btn:focus{ outline:2px solid rgba(245,158,11,0.12); outline-offset:4px }
+
+    .muted-link{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      padding:8px 10px;
+      border-radius:10px;
+    }
+
+    /* subtle background shapes */
+    .bg-blob{
+      position:absolute;
+      right:-40px;
+      top:-40px;
+      width:260px;
+      height:260px;
+      background: radial-gradient(circle at 30% 30%, rgba(245,158,11,0.12), rgba(245,158,11,0.06) 30%, transparent 60%);
+      filter: blur(28px);
+      transform: rotate(8deg);
+      pointer-events:none;
+      border-radius:40%;
+    }
+
+    /* accessibility: prefers reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .hammer, .timer{ animation: none }
+    }
+
+    /* small screens: shrink paddings */
+    @media (max-width:420px){
+      .left{ padding:20px }
+      .right{ padding:16px }
+      .card{ padding:18px }
+      h1{ font-size:20px }
+    }
+
+    footer.smallprint{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="title">
+    <section class="card left">
+      <div style="display:flex;align-items:center;gap:14px;justify-content:space-between;">
+        <div>
+          <div class="badge" aria-hidden="true">Техническое обслуживание</div>
+          <h1 id="title">
+            Сайт временно недоступен
+          </h1>
+        </div>
+        <div style="text-align:right">
+          <div class="small">Мы скоро вернёмся</div>
+          <div class="small" aria-hidden="true">Обновление: модуль инфраструктуры</div>
+        </div>
+      </div>
+
+      <p class="lead" style="margin-top:10px">
+        Сейчас мы выполняем плановые работы по обновлению и проверке сервисов. Всё должно занять <strong id="humanTime">пару часов</strong>. Не переживай — ничего не удаляется, а доступ к данным будет восстановлен автоматически.
+      </p>
+
+      <div class="clock-wrap" aria-hidden="false">
+        <div class="timer" role="status" aria-live="polite" aria-atomic="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="url(#g)" stroke-width="1.6" opacity="0.9"/>
+            <path d="M12 7v6l4 2" stroke="url(#g)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs>
+          </svg>
+          <div style="display:flex;flex-direction:column;line-height:1">
+            <span id="countdown" style="font-variant-numeric:tabular-nums">—:—:—</span>
+            <span style="font-size:12px;color:var(--muted)">Ориентировочно</span>
+          </div>
+        </div>
+
+        <div class="small" style="display:flex;flex-direction:column; gap:6px;">
+          <span><strong>Поддержка:</strong> <a class="muted-link" href="mailto:support@example.com">support@example.com</a></span>
+          <span class="small" style="color:var(--muted)">Если срочно — напиши нам, ответим в течение дня.</span>
+        </div>
+      </div>
+
+      <div class="actions" role="navigation" aria-label="Действия">
+        <a class="btn" href="#" onclick="location.reload(); return false;" title="Обновить страницу (попробовать снова)">
+          ⟳ Проверить ещё раз
+        </a>
+        <a class="muted-link" href="#" onclick="alert('Спасибо — скоро всё вернётся!'); return false;">Оставить сообщение</a>
+      </div>
+
+      <footer class="smallprint">Если сайт не восстановится в течение указанного времени — мы опубликуем обновление в разделе новостей.</footer>
+    </section>
+
+    <aside class="card right" aria-labelledby="visualTitle" aria-label="Декоративная панель">
+      <div id="visualTitle" style="position:absolute;left:18px;top:14px;font-size:12px;color:var(--muted);">Визуализация обновления</div>
+
+      <div class="visual" role="img" aria-label="Иллюстрация молота и искр — символ технических работ">
+        <!-- soft decorative blob -->
+        <div class="bg-blob" aria-hidden="true"></div>
+
+        <!-- sparkles area (decorative) -->
+        <svg class="sparkles" viewBox="0 0 160 160" aria-hidden="true">
+          <defs>
+            <radialGradient id="s" cx="30%" cy="20%"><stop offset="0%" stop-color="#ffd166" stop-opacity="0.95"/><stop offset="60%" stop-color="#f59e0b" stop-opacity="0.25"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle cx="28" cy="36" r="42" fill="url(#s)"/>
+        </svg>
+
+        <!-- Stylized hammer SVG (simple, original) -->
+        <svg class="hammer" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- handle -->
+          <g transform="translate(40,30)">
+            <rect x="80" y="40" width="16" height="110" rx="8" fill="#5b4033" />
+            <rect x="76" y="38" width="24" height="12" rx="6" fill="#ab7a2f" opacity="0.12"/>
+            <!-- head -->
+            <g transform="translate(-20,-10)">
+              <rect x="10" y="10" rx="10" ry="10" width="120" height="48" fill="#f9d976"/>
+              <rect x="12" y="14" rx="8" ry="8" width="116" height="40" fill="#f59e0b" opacity="0.12"/>
+              <rect x="14" y="18" rx="6" ry="6" width="112" height="32" fill="#fff6e6" opacity="0.06"/>
+              <path d="M14 34 h112" stroke="#e6b45a" stroke-width="6" stroke-linecap="round" opacity="0.12"/>
+            </g>
+            <!-- strap -->
+            <path d="M86 150 q-3 16 6 24 q10 8 18 0 q9-8 6-24" fill="#1f2937" opacity="0.12"/>
+            <ellipse cx="84" cy="168" rx="18" ry="6" fill="#111827" opacity="0.15"/>
+          </g>
+        </svg>
+
+      </div>
+
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="color:var(--muted);font-size:13px">Статус: <strong>Выполняем обновление</strong></div>
+        <div style="color:var(--muted);font-size:13px">Вернёмся: <strong id="eta">через пару часов</strong></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <script>
+    // Compact script: countdown timer for "пару часов"
+    // By default we show a 2-hour countdown from page open.
+    (function(){
+      const start = Date.now();
+      const durationMs = 2 * 60 * 60 * 1000; // 2 hours
+      const countdownEl = document.getElementById('countdown');
+      const etaEl = document.getElementById('eta');
+      const humanTime = document.getElementById('humanTime');
+
+      // Nicely format time left
+      function fmt(ms){
+        if(ms <= 0) return '00:00:00';
+        const s = Math.floor(ms / 1000);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+      }
+
+      // Update loop
+      function tick(){
+        const left = Math.max(0, durationMs - (Date.now() - start));
+        countdownEl.textContent = fmt(left);
+        // update ETA text in a friendly way
+        if(left > 3600*1000) {
+          etaEl.textContent = 'через пару часов';
+          humanTime && (humanTime.textContent = 'пару часов');
+        } else if(left > 60*1000) {
+          const mins = Math.ceil(left / 60000);
+          etaEl.textContent = `примерно через ${mins} минут`;
+          humanTime && (humanTime.textContent = `~${mins} минут`);
+        } else {
+          etaEl.textContent = 'скоро (несколько секунд)';
+          humanTime && (humanTime.textContent = 'скоро');
+        }
+        if(left <= 0) {
+          // when done, gently show finished state
+          countdownEl.textContent = '00:00:00';
+          document.querySelectorAll('.badge, .btn').forEach(el=>{
+            el.style.opacity = '0.95';
+          });
+        }
+      }
+
+      // Respect prefers-reduced-motion: if set, don't animate countdown updates aggressively
+      const rrm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setInterval(tick, rrm ? 2000 : 250);
+      tick();
+
+      // Small device adapt: hint for iOS/Android (not intrusive)
+      try {
+        const ua = navigator.userAgent || '';
+        const mobileHint = document.createElement('div');
+        mobileHint.style.position='fixed';
+        mobileHint.style.bottom='14px';
+        mobileHint.style.left='50%';
+        mobileHint.style.transform='translateX(-50%)';
+        mobileHint.style.fontSize='12px';
+        mobileHint.style.color='rgba(255,255,255,0.9)';
+        mobileHint.style.background='rgba(255,255,255,0.03)';
+        mobileHint.style.padding='8px 12px';
+        mobileHint.style.borderRadius='999px';
+        mobileHint.style.border='1px solid rgba(255,255,255,0.03)';
+        mobileHint.style.backdropFilter='blur(6px)';
+        mobileHint.style.display='none';
+        if(/iphone|ipad|ipod/i.test(ua)) {
+          mobileHint.textContent = 'Открыто на iPhone — свайпните вниз для обновления страницы';
+          mobileHint.style.display = 'block';
+        } else if(/android/i.test(ua)) {
+          mobileHint.textContent = 'Открыто на Android — используйте кнопку «Обновить» в браузере';
+          mobileHint.style.display = 'block';
+        }
+        document.body.appendChild(mobileHint);
+        setTimeout(()=>mobileHint.style.display='none', 8000);
+      } catch(e){ /* ignore */ }
+
+      // Accessibility: allow pressing 'r' to refresh quickly
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'r' || e.key === 'R'){ location.reload(); }
+      });
+
+    })();
+  </script>
+</body>
+</html>
